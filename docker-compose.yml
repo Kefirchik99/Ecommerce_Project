@@ -1,0 +1,49 @@
+services:
+  php-container:
+    build:
+      context: ./backend  # Update this to point to the backend directory
+      dockerfile: ./docker/php/Dockerfile
+    container_name: php-container
+    volumes:
+      - ./backend:/var/www/html
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql-container
+    networks:
+      - ecommerce-network
+
+  mysql-container:
+    image: mysql:5.7
+    container_name: mysql-container
+    environment:
+      MYSQL_DATABASE: scandiweb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - ecommerce-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/frontend/Dockerfile
+    container_name: frontend
+    volumes:
+      - ./frontend:/var/www/html
+    ports:
+      - "5173:5173"
+    depends_on:
+      - php-container
+    networks:
+      - ecommerce-network
+
+networks:
+  ecommerce-network:
+
+volumes:
+  mysql-data:

@@ -1,0 +1,16 @@
+{
+    "name": "yaro/ecommerce_project",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Yaro\\EcommerceProject\\": "backend/src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kefirchik99",
+            "email": "jermakent@gmail.com"
+        }
+    ],
+    "require": {}
+}
