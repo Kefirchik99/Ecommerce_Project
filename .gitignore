@@ -1,0 +1,15 @@
+# Ignore node_modules and build files
+frontend/node_modules/
+frontend/.next/
+frontend/build/
+
+# Ignore environment files
+frontend/.env
+backend/.env
+
+# Ignore vendor files for PHP
+backend/vendor/
+backend/composer.lock
+
+# Ignore database
+backend/database.sqlite
