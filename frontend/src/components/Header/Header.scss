@@ -1,0 +1,114 @@
+.header {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+
+    &__menu {
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    &__nav {
+        display: flex;
+        gap: 1rem;
+    }
+
+    &__categories {
+        list-style: none;
+        display: flex;
+    }
+
+    &__category {
+        font-family: "Raleway", sans-serif;
+        font-size: 16px;
+        font-weight: 400; // Default for non-selected categories
+        line-height: 19.2px;
+        text-align: center;
+        text-decoration: none;
+        color: #1d1f22;
+        position: relative; // To enable positioning for underline
+        padding-bottom: 5px; // Space for the underline
+
+        &:hover {
+            color: #5ece7b; // Optional hover effect
+        }
+
+        &--active {
+            font-weight: 600; // Bold for selected categories
+            color: #5ece7b;
+
+            /* Green underline */
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: -20px; // Align underline at the bottom
+                left: 0;
+                width: 100%; // Full width of the text
+                height: 2px; // Thickness of the underline
+                background-color: #5ece7b;
+            }
+        }
+    }
+
+    &__cart-container {
+        position: relative;
+    }
+
+    &__cart {
+        display: flex;
+        align-items: center;
+    }
+
+    &__cart-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+    &__cart-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background-color: black;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.8rem;
+    }
+
+    /* Cart Overlay Styling */
+    .cart-overlay {
+        position: absolute;
+        /* Ensure it aligns directly below the header */
+        right: 0;
+        width: 400px;
+        z-index: 200;
+    }
+
+    &__logo {
+        /* Keep the header height at 45px total */
+        height: 100%;
+        display: flex;
+        align-items: center;
+        /* This ensures the logo is vertically centered in the 45px header */
+
+        img {
+            /* Restrict the image so it does not exceed the header’s height */
+            max-height: 60px;
+            /* or 35px, or whatever you want smaller than 45px */
+            padding-bottom: 15px;
+            width: auto;
+            /* Keeps the aspect ratio correct */
+            display: block;
+            /* removes any default inline spacing */
+        }
+    }
+}

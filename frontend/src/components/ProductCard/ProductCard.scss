@@ -1,0 +1,110 @@
+.product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+    border: none;
+    overflow: hidden; // Prevents child elements from overflowing
+
+    &:hover {
+        box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+    }
+
+    &--out-of-stock {
+        opacity: 0.5;
+        filter: grayscale(100%);
+        pointer-events: auto;
+    }
+
+    &__image-container {
+        position: relative;
+        width: 354px;
+        height: 330px;
+        overflow: hidden;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        object-fit: contain;
+        display: block;
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__out-of-stock {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #8d8f9a;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.8rem;
+    }
+
+    &__name {
+        font-family: Raleway;
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 28.8px;
+        text-align: left;
+        color: #1d1f22;
+        text-decoration: none;
+        margin-bottom: 4px;
+    }
+
+    &__price {
+        font-family: 'Raleway', sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 28.8px;
+        text-align: left;
+        color: #1d1f22;
+        text-decoration: none;
+    }
+
+    &__quick-shop {
+        position: absolute;
+        right: 45px;
+        bottom: 65px;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #5ece7b;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        i {
+            font-size: 20px;
+            color: #fff;
+        }
+    }
+
+    &:hover &__quick-shop {
+        opacity: 1;
+    }
+}
