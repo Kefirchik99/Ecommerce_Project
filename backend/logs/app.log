@@ -1711,3 +1711,8 @@
 [2025-01-30T21:48:36.785759+00:00] app_logger.INFO: Attribute items fetched for attribute ID 3 [{"id":9,"displayValue":"Green","value":"#44FF03"},{"id":10,"displayValue":"Cyan","value":"#03FFF7"},{"id":11,"displayValue":"Blue","value":"#030BFF"},{"id":12,"displayValue":"Black","value":"#000000"},{"id":13,"displayValue":"White","value":"#FFFFFF"}] []
 [2025-01-30T21:48:36.786113+00:00] app_logger.INFO: Attribute items fetched for attribute ID 4 [{"id":14,"displayValue":"512G","value":"512G"},{"id":15,"displayValue":"1T","value":"1T"}] []
 [2025-01-30T21:48:36.786273+00:00] app_logger.INFO: Attributes fetched for product ID ps-5 [{"id":3,"name":"Color","type":"swatch","items":[{"id":9,"displayValue":"Green","value":"#44FF03"},{"id":10,"displayValue":"Cyan","value":"#03FFF7"},{"id":11,"displayValue":"Blue","value":"#030BFF"},{"id":12,"displayValue":"Black","value":"#000000"},{"id":13,"displayValue":"White","value":"#FFFFFF"}]},{"id":4,"name":"Capacity","type":"text","items":[{"id":14,"displayValue":"512G","value":"512G"},{"id":15,"displayValue":"1T","value":"1T"}]}] []
+[2025-02-01T16:57:54.378616+00:00] app_logger.INFO: Request received: 2025-02-01 16:57:54 [] []
+[2025-02-01T16:57:55.312806+00:00] app_logger.ERROR: Error fetching product: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'defaultdb.products' doesn't exist [] []
+[2025-02-01T16:57:55.953340+00:00] app_logger.INFO: Request received: 2025-02-01 16:57:55 [] []
+[2025-02-01T16:57:56.415627+00:00] app_logger.INFO: Starting resolveAll... [] []
+[2025-02-01T16:57:56.455974+00:00] app_logger.ERROR: Database Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'defaultdb.products' doesn't exist [] []
