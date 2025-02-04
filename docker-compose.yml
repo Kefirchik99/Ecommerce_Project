@@ -37,6 +37,7 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/var/www/html
+      - node_modules:/var/www/html/node_modules
     ports:
       - "5173:5173"
     depends_on:
@@ -49,3 +50,4 @@ networks:
 
 volumes:
   mysql-data:
+  node_modules:
