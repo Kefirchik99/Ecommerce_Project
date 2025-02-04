@@ -1,28 +1,30 @@
 services:
   php-container:
     build:
-      context: ./backend  # Update this to point to the backend directory
+      context: ./backend 
       dockerfile: ./docker/php/Dockerfile
     container_name: php-container
     volumes:
       - ./backend:/var/www/html
+      - ./db:/var/www/html/db
     ports:
       - "8000:80"
     depends_on:
       - mysql-container
     networks:
       - ecommerce-network
+    command: >
+      sh -c "php /var/www/html/src/Config/migrate.php && php /var/www/html/src/populate.php && apache2-foreground"
 
   mysql-container:
     image: mysql:5.7
     container_name: mysql-container
     environment:
       MYSQL_DATABASE: scandiweb
-      MYSQL_USER: root
       MYSQL_PASSWORD: root_password
       MYSQL_ROOT_PASSWORD: root_password
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -35,6 +37,7 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/var/www/html
+      - node_modules:/var/www/html/node_modules
     ports:
       - "5173:5173"
     depends_on:
@@ -47,3 +50,4 @@ networks:
 
 volumes:
   mysql-data:
+  node_modules:

@@ -1,17 +1,15 @@
-# Use an official Node runtime as a parent image
-FROM node:16
+FROM node:18
 
-# Set working directory
 WORKDIR /var/www/html
 
-# Copy project files
+COPY package.json ./
+
+RUN npm cache clean --force && npm install --legacy-peer-deps
+
+RUN npm install @rollup/rollup-linux-x64-gnu --legacy-peer-deps
+
 COPY . .
 
-# Install frontend dependencies
-RUN npm install
-
-# Expose port
 EXPOSE 5173
 
-# Start Vite development server
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev"]
