@@ -1,14 +1,18 @@
-# Use an official Node runtime as a parent image
-FROM node:21
+# Use an official Node LTS runtime as a parent image
+FROM node:18
 
 # Set working directory inside the container
 WORKDIR /var/www/html
 
-# Copy package.json first, then install dependencies
+# Copy package.json and package-lock.json first
 COPY package.json package-lock.json ./
 
-# Clear npm cache and force clean install to prevent missing modules
-RUN npm cache clean --force && npm install --legacy-peer-deps
+# Remove the package-lock so that npm installs a fresh, Linux-appropriate dependency tree,
+# then clear cache and install dependencies (using legacy-peer-deps)
+RUN rm -f package-lock.json && npm cache clean --force && npm install --legacy-peer-deps
+
+# Explicitly install the missing Linux-specific Rollup module
+RUN npm install @rollup/rollup-linux-x64-gnu --legacy-peer-deps
 
 # Copy the rest of the app AFTER installing dependencies
 COPY . .
