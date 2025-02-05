@@ -33,6 +33,7 @@ class Database
 
                 if (!empty($sslCaPath) && file_exists($sslCaPath)) {
                     $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCaPath;
+                    $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
                 }
 
                 self::$instance = new PDO(
