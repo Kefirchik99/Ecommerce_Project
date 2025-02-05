@@ -16,17 +16,6 @@ use Yaro\EcommerceProject\GraphQL\Resolvers\PriceResolver;
 use Yaro\EcommerceProject\GraphQL\Resolvers\OrderResolver;
 use Throwable;
 
-$allowedOrigin = getenv('ALLOWED_ORIGIN') ?: 'http://localhost:5173';
-header("Access-Control-Allow-Origin: " . $allowedOrigin);
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Max-Age: 86400");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
-
 class GraphQL
 {
     private LoggerInterface $logger;
