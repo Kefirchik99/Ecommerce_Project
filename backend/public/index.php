@@ -8,13 +8,17 @@ use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
 use Yaro\EcommerceProject\GraphQL\GraphQL;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 try {
     $logger = $GLOBALS['logger'] ?? null;
     if (!$logger) {
         throw new RuntimeException("Logger not initialized");
     }
 
-    // Handle CORS
+
     $allowedOrigins = explode(',', getenv('ALLOWED_ORIGINS') ?: 'https://yy-ecommerce.netlify.app');
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
@@ -35,7 +39,7 @@ try {
         exit();
     }
 
-    // Routing
+
     $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute(['GET', 'POST', 'OPTIONS'], '/graphql', [GraphQL::class, 'handle']);
     });
