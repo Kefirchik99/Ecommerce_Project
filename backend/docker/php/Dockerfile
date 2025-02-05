@@ -18,7 +18,7 @@ WORKDIR /var/www/html
 
 RUN mkdir -p /var/www/html/logs \
     && touch /var/www/html/logs/app.log \
-    && chown -R www-data:www-data /var/www/html \
+    && chown -R www-data:www-data /var/www/html/logs  \
     && chmod -R 775 /var/www/html/logs
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
