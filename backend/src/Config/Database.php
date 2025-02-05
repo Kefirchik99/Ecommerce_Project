@@ -17,7 +17,7 @@ class Database
         if (self::$instance === null) {
             try {
                 $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-                $dotenv->load();
+                $dotenv->safeLoad();
 
                 $host = $_ENV['DB_HOST'] ?? 'localhost';
                 $port = $_ENV['DB_PORT'] ?? '3306';
