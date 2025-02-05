@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
+RUN a2enmod headers
+
 COPY aiven-ca.pem /etc/ssl/certs/aiven-ca.pem
 
 COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
