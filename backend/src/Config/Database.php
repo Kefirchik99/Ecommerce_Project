@@ -38,6 +38,9 @@ class Database
                     $options[PDO::ATTR_TIMEOUT] = 5;
                 }
 
+                echo "SSL CA Path: " . $sslCaPath . "\n";
+                echo "File exists: " . (file_exists($sslCaPath) ? 'Yes' : 'No') . "\n";
+
                 self::$instance = new PDO(
                     "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
                     $user,
