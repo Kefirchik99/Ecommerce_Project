@@ -19,7 +19,9 @@ COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.c
 
 WORKDIR /var/www/html
 
-RUN mkdir -p /var/www/html/logs && chmod -R 777 /var/www/html/logs
+RUN mkdir -p /var/www/html/logs && \
+    touch /var/www/html/logs/app.log && \
+    chmod -R 777 /var/www/html/logs
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
