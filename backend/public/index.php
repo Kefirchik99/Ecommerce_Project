@@ -22,14 +22,10 @@ try {
         throw new RuntimeException("Logger not initialized");
     }
 
-
-    $allowedOrigins = explode(',', getenv('ALLOWED_ORIGINS') ?: 'https://yy-ecommerce.netlify.app');
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $allowedPattern = '/^https:\/\/(?:[a-z0-9-]+--)?yy-ecommerce\.netlify\.app$/';
 
-    $isAllowedOrigin = in_array($origin, $allowedOrigins) ||
-        preg_match('/^https:\/\/([a-z0-9-]+--)?yy-ecommerce\.netlify\.app$/', $origin);
-
-    if ($isAllowedOrigin) {
+    if (preg_match($allowedPattern, $origin)) {
         header("Access-Control-Allow-Origin: $origin");
     }
 
@@ -42,7 +38,6 @@ try {
         http_response_code(204);
         exit();
     }
-
 
     $dispatcher = FastRoute\simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute(['GET', 'POST', 'OPTIONS'], '/graphql', [GraphQL::class, 'handle']);

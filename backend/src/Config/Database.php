@@ -34,19 +34,15 @@ class Database
                 if (!empty($sslCaPath) && file_exists($sslCaPath)) {
                     $options[PDO::MYSQL_ATTR_SSL_CA] = $sslCaPath;
                     $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
-                    $options[PDO::MYSQL_ATTR_SSL_CIPHER] = 'DEFAULT@SECLEVEL=0';
+                    $options[PDO::MYSQL_ATTR_SSL_CIPHER] = 'ECDHE-ECDSA-AES128-GCM-SHA256';
                     $options[PDO::ATTR_TIMEOUT] = 5;
                 }
 
-                echo "SSL CA Path: " . $sslCaPath . "\n";
-                echo "File exists: " . (file_exists($sslCaPath) ? 'Yes' : 'No') . "\n";
+                error_log("SSL Debug: Path={$sslCaPath}, Exists=" . (file_exists($sslCaPath) ? 'Yes' : 'No'));
 
-                self::$instance = new PDO(
-                    "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
-                    $user,
-                    $password,
-                    $options
-                );
+                $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4;sslmode=REQUIRED";
+
+                self::$instance = new PDO($dsn, $user, $password, $options);
             } catch (PDOException $e) {
                 error_log('Database connection failed: ' . $e->getMessage());
                 die('Database connection failed.');
