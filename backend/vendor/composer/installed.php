@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'yaro/ecommerce-project-backend',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '8f1e369e8bd85d55a6a148ea71ac7324384edb72',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '47ecf71bc8a9ea5fe8bc6a122f4088e5e91dafaa',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -107,9 +107,9 @@
             'dev_requirement' => false,
         ),
         'yaro/ecommerce-project-backend' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '8f1e369e8bd85d55a6a148ea71ac7324384edb72',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '47ecf71bc8a9ea5fe8bc6a122f4088e5e91dafaa',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

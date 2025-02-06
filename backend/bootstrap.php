@@ -6,9 +6,8 @@ namespace Yaro\EcommerceProject;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Monolog\Level;
 use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NullHandler;
 use Yaro\EcommerceProject\Config\Database;
 
 ini_set('display_errors', 1);
@@ -19,11 +18,10 @@ try {
     $db = Database::getConnection();
 
     $logger = new Logger('app_logger');
-    $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Level::Debug));
+    $logger->pushHandler(new NullHandler());
 
     $GLOBALS['logger'] = $logger;
 } catch (\Exception $e) {
     $logger = new Logger('app_logger');
-    $logger->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Level::Debug));
-    $logger->error("Bootstrap error: " . $e->getMessage());
+    $logger->pushHandler(new NullHandler());
 }

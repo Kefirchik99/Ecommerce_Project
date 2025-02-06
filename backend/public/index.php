@@ -12,16 +12,12 @@ use FastRoute\RouteCollector;
 use FastRoute\Dispatcher;
 use Yaro\EcommerceProject\GraphQL\GraphQL;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$logger = $GLOBALS['logger'] ?? null;
+if (!$logger) {
+    throw new RuntimeException("Logger not initialized.");
+}
 
 try {
-    // $logger = $GLOBALS['logger'] ?? null;
-    // if (!$logger) {
-    //     throw new RuntimeException("Logger not initialized");
-    // }
-
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     $allowedPattern = '/^https:\/\/(?:[a-z0-9-]+--)?yy-ecommerce\.netlify\.app$/';
 
