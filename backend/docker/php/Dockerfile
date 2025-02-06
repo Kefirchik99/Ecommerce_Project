@@ -16,8 +16,6 @@ COPY ./docker/apache/000-default.conf /etc/apache2/sites-available/000-default.c
 
 WORKDIR /var/www/html
 
-USER www-data
-
 RUN mkdir -p /var/www/html/logs \
     && touch /var/www/html/logs/app.log \
     && chown -R www-data:www-data /var/www/html/logs \
