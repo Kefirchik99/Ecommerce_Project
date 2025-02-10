@@ -9,17 +9,18 @@ class ProductCard extends Component {
         e.preventDefault();
         e.stopPropagation();
         const { product, onQuickShop } = this.props;
-        onQuickShop(product.id);
+        onQuickShop(product);
     };
 
     render() {
         const { product } = this.props;
         const isOutOfStock = !product.inStock;
-
         const productImage = product.gallery?.[0] || "https://via.placeholder.com/300";
         const productPrice = product.price ? `$${product.price.toFixed(2)}` : "Price N/A";
-
-        const kebabName = product.name.toLowerCase().replace(/\W+/g, "-").replace(/^-+|-+$/g, "");
+        const kebabName = product.name
+            .toLowerCase()
+            .replace(/\W+/g, "-")
+            .replace(/^-+|-+$/g, "");
 
         return (
             <Link
@@ -28,7 +29,11 @@ class ProductCard extends Component {
                 data-testid={`product-${kebabName}`}
             >
                 <div className="product-card__image-container">
-                    <img src={productImage} alt={product.name} className="product-card__image" />
+                    <img
+                        src={productImage}
+                        alt={product.name}
+                        className="product-card__image"
+                    />
                     {isOutOfStock && (
                         <div className="product-card__overlay">
                             <p className="product-card__out-of-stock">Out of Stock</p>

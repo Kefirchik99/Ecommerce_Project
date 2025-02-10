@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-// Query to get products with a category filter
+
 export const GET_PRODUCTS_WITH_FILTER = gql`
   query GetProducts($category: String) {
     products(category: $category) {
@@ -13,7 +13,7 @@ export const GET_PRODUCTS_WITH_FILTER = gql`
   }
 `;
 
-// Query to get all categories
+
 export const GET_CATEGORIES = gql`
   query GetCategories {
     categories {
@@ -23,7 +23,7 @@ export const GET_CATEGORIES = gql`
   }
 `;
 
-// Query to get all products
+
 export const GET_PRODUCTS = gql`
   query GetProducts {
     products {
@@ -42,7 +42,7 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
-// Query to get product details by ID
+
 export const GET_PRODUCT_DETAILS = gql`
   query GetProductDetails($id: ID!) {
     product(id: $id) {
