@@ -25,6 +25,7 @@ const ProductDetailPage = () => {
         }
     }, [data, setCategory]);
 
+    // Preselect default attribute values if none have been chosen yet.
     useEffect(() => {
         if (data?.product?.attributes && Object.keys(selectedAttributes).length === 0) {
             const defaultAttributes = {};
