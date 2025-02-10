@@ -16,6 +16,7 @@ const ProductDetailPage = () => {
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [cartOverlayOpen, setCartOverlayOpen] = useState(false);
+
     const { loading, error, data } = useQuery(GET_PRODUCT_DETAILS, {
         variables: { id },
     });
@@ -48,6 +49,7 @@ const ProductDetailPage = () => {
             selectedOption: selectedAttributes[attr.name],
             options: attr.items.map((i) => i.value),
         }));
+
         addItem({
             id: product.id,
             name: product.name,
@@ -55,12 +57,14 @@ const ProductDetailPage = () => {
             gallery: product.gallery,
             attributes: attributesForCart,
         });
+
         setCartOverlayOpen(true);
     };
 
     const nextImage = () => {
         setSelectedIndex((prevIndex) => (prevIndex + 1) % product.gallery.length);
     };
+
     const prevImage = () => {
         setSelectedIndex((prevIndex) =>
             prevIndex === 0 ? product.gallery.length - 1 : prevIndex - 1
@@ -82,6 +86,7 @@ const ProductDetailPage = () => {
                         />
                     ))}
                 </div>
+
                 <div className="product-detail-page__main-image">
                     {product.gallery.length > 1 && (
                         <button className="carousel-button left" onClick={prevImage}>
@@ -96,8 +101,10 @@ const ProductDetailPage = () => {
                     )}
                 </div>
             </div>
+
             <div className="product-detail-page__details">
                 <h1 className="product-detail-page__name">{product.name}</h1>
+
                 <div className="product-detail-page__attributes">
                     {product.attributes.map((attr) => {
                         const kebabName = attr.name.toLowerCase().replace(/\s+/g, "-");
@@ -139,8 +146,10 @@ const ProductDetailPage = () => {
                         );
                     })}
                 </div>
+
                 <h4 className="product-detail-page__price-label">PRICE:</h4>
                 <p className="product-detail-page__price">${product.price.toFixed(2)}</p>
+
                 <button
                     className="product-detail-page__add-to-cart"
                     disabled={isAddToCartDisabled}
@@ -149,13 +158,12 @@ const ProductDetailPage = () => {
                 >
                     Add to Cart
                 </button>
-                <div
-                    className="product-detail-page__description"
-                    data-testid="product-description"
-                >
+
+                <div className="product-detail-page__description" data-testid="product-description">
                     {parse(product.description)}
                 </div>
             </div>
+
             {cartOverlayOpen && <CartOverlay onClose={() => setCartOverlayOpen(false)} />}
         </div>
     );
