@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import parse from "html-react-parser";
@@ -14,15 +14,28 @@ const ProductDetailPage = () => {
     const { setCategory } = useHeader();
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [selectedIndex, setSelectedIndex] = useState(0);
+
     const { loading, error, data } = useQuery(GET_PRODUCT_DETAILS, {
         variables: { id },
     });
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (data?.product?.category) {
             setCategory(data.product.category.toLowerCase());
         }
     }, [data, setCategory]);
+
+    useEffect(() => {
+        if (data?.product?.attributes && Object.keys(selectedAttributes).length === 0) {
+            const defaultAttributes = {};
+            data.product.attributes.forEach((attr) => {
+                if (attr.items && attr.items.length > 0) {
+                    defaultAttributes[attr.name] = attr.items[0].value;
+                }
+            });
+            setSelectedAttributes(defaultAttributes);
+        }
+    }, [data, selectedAttributes]);
 
     if (loading) return <p>Loading product details...</p>;
     if (error) return <p>Error loading product details: {error.message}</p>;
@@ -34,11 +47,8 @@ const ProductDetailPage = () => {
         setSelectedAttributes((prev) => ({ ...prev, [attrName]: itemValue }));
     };
 
-    const getEffectiveValue = (attr) =>
-        selectedAttributes[attr.name] ?? attr.items[0].value;
-
     const allAttributesSelected = product.attributes.every(
-        (attr) => getEffectiveValue(attr)
+        (attr) => selectedAttributes[attr.name]
     );
     const isAddToCartDisabled = !product.inStock || !allAttributesSelected;
 
@@ -46,9 +56,10 @@ const ProductDetailPage = () => {
         const attributesForCart = product.attributes.map((attr) => ({
             name: attr.name,
             type: attr.type,
-            selectedOption: getEffectiveValue(attr),
+            selectedOption: selectedAttributes[attr.name],
             options: attr.items.map((i) => i.value),
         }));
+
         addItem({
             id: product.id,
             name: product.name,
@@ -56,6 +67,7 @@ const ProductDetailPage = () => {
             gallery: product.gallery,
             attributes: attributesForCart,
         });
+
         navigate("/");
     };
 
@@ -90,7 +102,12 @@ const ProductDetailPage = () => {
                             ❮
                         </button>
                     )}
-                    <img src={product.gallery[selectedIndex]} alt={`${product.name}-main`} />
+
+                    <img
+                        src={product.gallery[selectedIndex]}
+                        alt={`${product.name}-main`}
+                    />
+
                     {product.gallery.length > 1 && (
                         <button className="carousel-button right" onClick={nextImage}>
                             ❯
@@ -105,8 +122,6 @@ const ProductDetailPage = () => {
                 <div className="product-detail-page__attributes">
                     {product.attributes.map((attr) => {
                         const kebabName = attr.name.toLowerCase().replace(/\s+/g, "-");
-                        const effectiveValue = getEffectiveValue(attr);
-
                         return (
                             <div
                                 key={attr.name}
@@ -116,7 +131,8 @@ const ProductDetailPage = () => {
                                 <h4>{attr.name}:</h4>
                                 <div className="product-detail-page__attribute-items">
                                     {attr.items.map((item) => {
-                                        const isSelected = effectiveValue === item.value;
+                                        const isSelected =
+                                            selectedAttributes[attr.name] === item.value;
                                         return (
                                             <button
                                                 key={item.value}
