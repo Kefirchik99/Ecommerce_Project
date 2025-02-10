@@ -128,7 +128,6 @@
             cursor: pointer;
             background-color: #fff;
             transition: background-color 0.2s ease-in-out;
-
             font-family: 'Source Sans Pro', sans-serif;
             font-size: 16px;
             font-weight: 400;
@@ -201,4 +200,10 @@
             }
         }
     }
+}
+
+.product-detail-page__attribute-item--swatch.selected .product-detail-page__color-swatch {
+    position: relative;
+    z-index: 2;
+    border: 2px solid #5ECE7B;
 }
