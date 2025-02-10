@@ -25,7 +25,6 @@ const ProductDetailPage = () => {
         }
     }, [data, setCategory]);
 
-    // Preselect default attribute values if none have been chosen yet.
     useEffect(() => {
         if (data?.product?.attributes && Object.keys(selectedAttributes).length === 0) {
             const defaultAttributes = {};
@@ -143,7 +142,8 @@ const ProductDetailPage = () => {
                                                         : ""
                                                     }`}
                                                 onClick={() => handleSelectAttribute(attr.name, item.value)}
-                                                data-testid={`product-attribute-${attr.name.toLowerCase()}-${item.value}`}
+                                                data-testid={`product-attribute-${attr.name.toLowerCase()}-${attr.type === "swatch" ? item.displayValue : item.value
+                                                    }`}
                                             >
                                                 {attr.type === "swatch" ? (
                                                     <span
