@@ -19,7 +19,6 @@ const ProductDetailPage = () => {
     const { loading, error, data } = useQuery(GET_PRODUCT_DETAILS, { variables: { id } });
 
     useEffect(() => {
-
         if (data?.product?.category) {
             setCategory(data.product.category.toLowerCase());
         }
@@ -117,9 +116,9 @@ const ProductDetailPage = () => {
                                         return (
                                             <button
                                                 key={item.value}
-                                                className={`product-detail-page__attribute-item ${isSelected ? "selected" : ""
-                                                    } ${attr.type === "swatch" ? "product-detail-page__attribute-item--swatch" : ""}`}
+                                                className={`product-detail-page__attribute-item ${isSelected ? "selected" : ""} ${attr.type === "swatch" ? "product-detail-page__attribute-item--swatch" : ""}`}
                                                 onClick={() => handleSelectAttribute(attr.name, item.value)}
+                                                data-testid={`product-attribute-${attr.name.toLowerCase()}-${item.value}`}
                                             >
                                                 {attr.type === "swatch" ? (
                                                     <span
