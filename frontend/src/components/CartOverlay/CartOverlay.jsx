@@ -39,7 +39,7 @@ const CartOverlay = ({ onClose }) => {
     return (
         <>
             <div className="cart-overlay__background" onClick={onClose} />
-            <div className="cart-overlay">
+            <div className="cart-overlay" data-testid="cart-overlay">
                 <div className="cart-overlay__content">
                     <h2 className="cart-overlay__title">
                         My Bag, {cartItems.length} {cartItems.length === 1 ? "item" : "items"}

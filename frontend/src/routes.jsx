@@ -6,8 +6,8 @@ import ProductDetailPage from './product-pages/ProductDetailPage/ProductDetailPa
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/category/all" replace />} />
-            <Route path="/category/:categoryName" element={<ProductListPage />} />
+            <Route path="/" element={<Navigate to="/all" replace />} />
+            <Route path="/:categoryName" element={<ProductListPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="*" element={<h2>404 - Not Found</h2>} />
         </Routes>

@@ -28,7 +28,7 @@ const Header = () => {
             <nav className="header__nav">
                 <ul className="header__categories">
                     {categories.map((categoryItem) => {
-                        const toPath = `/category/${categoryItem.id.toLowerCase()}`;
+                        const toPath = `/${categoryItem.id.toLowerCase()}`;
                         const isActive =
                             location.pathname === toPath ||
                             (location.pathname.startsWith("/product/") &&
