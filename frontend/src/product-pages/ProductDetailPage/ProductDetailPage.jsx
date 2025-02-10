@@ -26,18 +26,6 @@ const ProductDetailPage = () => {
         }
     }, [data, setCategory]);
 
-    useEffect(() => {
-        if (data?.product?.attributes && Object.keys(selectedAttributes).length === 0) {
-            const defaultAttributes = {};
-            data.product.attributes.forEach((attr) => {
-                if (attr.items && attr.items.length > 0) {
-                    defaultAttributes[attr.name] = attr.items[0].value;
-                }
-            });
-            setSelectedAttributes(defaultAttributes);
-        }
-    }, [data, selectedAttributes]);
-
     if (loading) return <p>Loading product details...</p>;
     if (error) return <p>Error loading product details: {error.message}</p>;
     const product = data?.product;

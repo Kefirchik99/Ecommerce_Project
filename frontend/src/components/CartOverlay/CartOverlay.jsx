@@ -66,8 +66,8 @@ const CartOverlay = ({ onClose }) => {
                                                                 return (
                                                                     <span
                                                                         key={option}
-                                                                        className={`cart-overlay__attribute-option ${isSelected ? "selected" : ""} ${isColor ? "cart-overlay__color-swatch" : ""
-                                                                            }`}
+                                                                        className={`cart-overlay__attribute-option ${isSelected ? "selected" : ""
+                                                                            } ${isColor ? "cart-overlay__color-swatch" : ""}`}
                                                                         style={isColor ? { backgroundColor: option } : {}}
                                                                         data-testid={`cart-item-attribute-${attrKebab}-${optionKebab}${isSelected ? "-selected" : ""
                                                                             }`}
