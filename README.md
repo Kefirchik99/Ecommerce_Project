@@ -2,7 +2,8 @@
 
 A **full-stack** eCommerce website with product listings, cart functionality, and a GraphQL-based backend.
 
-![E-Commerce App Preview](![[./docs/screenshot1.png |300]])
+**E-Commerce App Preview**
+<img src="./docs/screenshot1.png" alt="E-Commerce App Preview" width="300" />
 
 ## Live Demo
 
@@ -55,13 +56,13 @@ It uses **PHP** (no frameworks) for the backend (with GraphQL), **MySQL** for th
 ## Screenshots
 
 **Product Listing Page**  
-![Product Listing Page](./docs/screenshot1.png)
+<img src="./docs/screenshot1.png" alt="Product Listing Page" width="300" />
 
 **Product Details Page**  
-![Product Detail Page](./docs/screenshot2.png)
+<img src="./docs/screenshot2.png" alt="Product Details Page" width="300" />
 
 **Cart Overlay**  
-![Cart Overlay](./docs/screenshot3.png)
+<img src="./docs/screenshot3.png" alt="Cart Overlay" width="300" />
 
 ---
 
