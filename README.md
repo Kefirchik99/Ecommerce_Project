@@ -2,7 +2,7 @@
 
 A **full-stack** eCommerce website with product listings, cart functionality, and a GraphQL-based backend.
 
-![E-Commerce App Preview](https://via.placeholder.com/800x400)
+(https://via.placeholder.com/800x400)
 <sup>![alt text](image.png)</sup>
 
 ## Live Demo
