@@ -143,7 +143,7 @@ Ecommerce_Project/
 
 - **`backend/src`**: Contains PHP classes for GraphQL schema, resolvers, and DB seeding.
 - **`frontend/src`**: React application, with pages for Product Listing, Product Detail, Cart Overlay, etc.
-- **`db`**: (Optional) SQL migrations or additional scripts.
+- **`db`**: SQL migrations or additional scripts.
 - **`docker-compose.yml`**: Orchestrates containers: MySQL, PHP (Apache), and React dev server.
 
 ---
