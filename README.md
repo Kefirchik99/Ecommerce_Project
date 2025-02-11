@@ -2,7 +2,7 @@
 
 A **full-stack** eCommerce website with product listings, cart functionality, and a GraphQL-based backend.
 
-![E-Commerce App Preview](./docs/screenshot1.png)
+![E-Commerce App Preview](![[./docs/screenshot1.png |300]])
 
 ## Live Demo
 
