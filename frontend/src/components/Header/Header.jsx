@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_CATEGORIES } from "../../graphql/queries";
@@ -11,11 +11,18 @@ import logo from "../../assets/a-logo.png";
 
 const Header = () => {
     const { totalItems } = useContext(CartContext);
-    const [isCartOpen, setIsCartOpen] = React.useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const location = useLocation();
     const { category } = useHeader();
+    const [categories, setCategories] = useState([]);
 
     const { loading, error, data } = useQuery(GET_CATEGORIES);
+
+    useEffect(() => {
+        if (data && data.categories) {
+            setCategories(data.categories);
+        }
+    }, [data]);
 
     if (loading) return <p>Loading categories...</p>;
     if (error) return <p>Error loading categories</p>;
@@ -33,7 +40,7 @@ const Header = () => {
                             ALL
                         </Link>
                     </li>
-                    {data.categories.map((categoryItem) => {
+                    {categories.map((categoryItem) => {
                         const toPath = `/category/${categoryItem.name.toLowerCase()}`;
                         const isActive =
                             location.pathname === toPath ||
