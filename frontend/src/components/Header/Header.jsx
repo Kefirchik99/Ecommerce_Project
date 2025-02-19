@@ -20,6 +20,10 @@ const Header = () => {
     const filteredCategories = categories.filter(
         (cat) => cat.name.toLowerCase() !== "all"
     );
+    const uniqueCategories = filteredCategories.filter(
+        (cat, index, self) =>
+            index === self.findIndex((c) => c.name.toLowerCase() === cat.name.toLowerCase())
+    );
     return (
         <header className="header">
             <nav className="header__nav">
@@ -34,7 +38,7 @@ const Header = () => {
                             ALL
                         </Link>
                     </li>
-                    {filteredCategories.map((categoryItem) => {
+                    {uniqueCategories.map((categoryItem) => {
                         const toPath = `/category/${categoryItem.name.toLowerCase()}`;
                         const isActive =
                             location.pathname === toPath ||
