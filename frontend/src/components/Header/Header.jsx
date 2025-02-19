@@ -26,8 +26,8 @@ const Header = () => {
                 <ul className="header__categories">
                     <li className="header__menu">
                         <Link
-                            to="/all"
-                            className={`header__category ${location.pathname === "/all" ? "header__category--active" : ""
+                            to="/category/all"
+                            className={`header__category ${location.pathname === "/category/all" ? "header__category--active" : ""
                                 }`}
                             data-testid="category-link"
                         >
@@ -44,8 +44,7 @@ const Header = () => {
                             <li className="header__menu" key={categoryItem.id}>
                                 <Link
                                     to={toPath}
-                                    className={`header__category ${isActive ? "header__category--active" : ""
-                                        }`}
+                                    className={`header__category ${isActive ? "header__category--active" : ""}`}
                                     data-testid={isActive ? "active-category-link" : "category-link"}
                                 >
                                     {categoryItem.name.toUpperCase()}
