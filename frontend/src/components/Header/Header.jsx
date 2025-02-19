@@ -14,15 +14,10 @@ const Header = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const location = useLocation();
     const { category } = useHeader();
-    const [categories, setCategories] = useState([]);
 
     const { loading, error, data } = useQuery(GET_CATEGORIES);
 
-    useEffect(() => {
-        if (data && data.categories) {
-            setCategories(data.categories);
-        }
-    }, [data]);
+    const categories = data?.categories || [];
 
     if (loading) return <p>Loading categories...</p>;
     if (error) return <p>Error loading categories</p>;
