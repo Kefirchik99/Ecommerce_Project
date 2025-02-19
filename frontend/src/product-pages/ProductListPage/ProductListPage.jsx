@@ -1,36 +1,16 @@
 import React, { useEffect, useContext } from "react";
 import "./ProductListPage.scss";
 import { useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { GET_PRODUCTS_WITH_FILTER } from "../../graphql/queries";
 import ProductCard from "../../components/ProductCard";
 import { CartContext } from "../../context/CartContext";
 import { useHeader } from "../../context/HeaderContext";
-
-const GET_PRODUCTS_BY_CATEGORY = gql`
-  query GetProductsByCategory($category: String) {
-    products(category: $category) {
-      id
-      name
-      inStock
-      gallery
-      price
-      attributes {
-        name
-        type
-        items {
-          value
-        }
-      }
-    }
-  }
-`;
 
 const ProductListPage = () => {
   const { categoryName } = useParams();
   const { addItem } = useContext(CartContext);
   const { setCategory } = useHeader();
-
-  const effectiveCategory = categoryName.toLowerCase() === "all" ? null : categoryName.toLowerCase();
 
   useEffect(() => {
     if (categoryName) {
@@ -38,8 +18,8 @@ const ProductListPage = () => {
     }
   }, [categoryName, setCategory]);
 
-  const { loading, error, data } = useQuery(GET_PRODUCTS_BY_CATEGORY, {
-    variables: { category: effectiveCategory },
+  const { loading, error, data } = useQuery(GET_PRODUCTS_WITH_FILTER, {
+    variables: { category: categoryName.toLowerCase() === "all" ? null : categoryName.toLowerCase() },
   });
 
   const pageTitle = categoryName.charAt(0).toUpperCase() + categoryName.slice(1).toLowerCase();
