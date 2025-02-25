@@ -35,15 +35,12 @@ class Migrate
     {
         try {
             echo "Running migrations...\n";
-
             $schemaFile = realpath(__DIR__ . '/../../db/schema.sql');
             if (!file_exists($schemaFile)) {
                 throw new Exception("schema.sql not found at: $schemaFile");
             }
-
             $schemaSQL = file_get_contents($schemaFile);
             $this->db->exec($schemaSQL);
-
             echo "Database migrations applied successfully.\n";
         } catch (PDOException $e) {
             echo "Database error: " . $e->getMessage() . "\n";

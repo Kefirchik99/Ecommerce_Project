@@ -6,6 +6,7 @@ namespace Yaro\EcommerceProject\Utils;
 
 use Yaro\EcommerceProject\Config\Database;
 use Psr\Log\LoggerInterface;
+use PDOException;
 
 class DatabaseSeeder
 {
@@ -20,7 +21,6 @@ class DatabaseSeeder
     {
         $db = Database::getConnection();
         $this->logger->info("Starting database seeding...");
-
         if (!empty($data['categories'])) {
             foreach ($data['categories'] as $category) {
                 try {
@@ -31,12 +31,11 @@ class DatabaseSeeder
                     $stmt = $db->prepare("INSERT IGNORE INTO categories (name) VALUES (:name)");
                     $stmt->execute(['name' => $category['name']]);
                     $this->logger->info("Inserted category: {$category['name']}");
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $this->logger->error("Error inserting category: {$e->getMessage()}");
                 }
             }
         }
-
         if (!empty($data['products'])) {
             foreach ($data['products'] as $product) {
                 try {
@@ -51,7 +50,6 @@ class DatabaseSeeder
                         $this->logger->error("Category '{$product['category']}' not found for product ID: {$product['id']}");
                         continue;
                     }
-
                     $stmt = $db->prepare("
                         INSERT INTO products (id, name, description, brand, category_id, category, price, in_stock)
                         VALUES (:id, :name, :description, :brand, :category_id, :category, :price, :in_stock)
@@ -72,13 +70,14 @@ class DatabaseSeeder
                         'category_id' => $categoryId,
                         'category' => $product['category'],
                         'price' => $product['prices'][0]['amount'] ?? null,
-                        'in_stock' => isset($product['inStock']) ? (int) $product['inStock'] : 1,
+                        'in_stock' => isset($product['inStock']) ? (int)$product['inStock'] : 1,
                     ]);
                     $this->logger->info("Inserted product: {$product['name']} (ID: {$product['id']}, Category ID: {$categoryId})");
-
                     if (!empty($product['gallery'])) {
                         foreach ($product['gallery'] as $imageUrl) {
-                            if (empty($imageUrl)) continue;
+                            if (empty($imageUrl)) {
+                                continue;
+                            }
                             $galleryStmt = $db->prepare("
                                 INSERT IGNORE INTO gallery (product_id, image_url)
                                 VALUES (:product_id, :image_url)
@@ -90,10 +89,11 @@ class DatabaseSeeder
                             $this->logger->info("Inserted gallery image for product ID: {$product['id']}");
                         }
                     }
-
                     if (!empty($product['attributes'])) {
                         foreach ($product['attributes'] as $attribute) {
-                            if (empty($attribute['name']) || empty($attribute['items'])) continue;
+                            if (empty($attribute['name']) || empty($attribute['items'])) {
+                                continue;
+                            }
                             $attributeStmt = $db->prepare("
                                 INSERT IGNORE INTO attributes (product_id, name, type)
                                 VALUES (:product_id, :name, :type)
@@ -123,7 +123,9 @@ class DatabaseSeeder
                                 VALUES (:attribute_id, :display_value, :value)
                             ");
                             foreach ($attribute['items'] as $item) {
-                                if (empty($item['value'])) continue;
+                                if (empty($item['value'])) {
+                                    continue;
+                                }
                                 $itemStmt->execute([
                                     'attribute_id' => $attributeId,
                                     'display_value' => $item['displayValue'] ?? $item['value'],
@@ -133,12 +135,11 @@ class DatabaseSeeder
                             }
                         }
                     }
-                } catch (\PDOException $e) {
+                } catch (PDOException $e) {
                     $this->logger->error("Error inserting product ID {$product['id']}: {$e->getMessage()}");
                 }
             }
         }
-
         $this->logger->info("Database seeding completed successfully.");
     }
 }

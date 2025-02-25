@@ -24,32 +24,22 @@ class OrderResolver
         if (empty($products)) {
             throw new RuntimeException("Cannot create an empty order.");
         }
-
         $db = Database::getConnection();
-
         try {
             $db->beginTransaction();
-
             $total = array_reduce($products, fn($sum, $item) => $sum + ($item['price'] * $item['quantity']), 0);
-
             $stmt = $db->prepare("INSERT INTO orders (total) VALUES (:total)");
             $stmt->execute(['total' => $total]);
             $orderId = $db->lastInsertId();
-
-            $stmt = $db->prepare("
-                INSERT INTO order_items (order_id, product_id, quantity, price) 
-                VALUES (:order_id, :product_id, :quantity, :price)
-            ");
-
+            $stmt = $db->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (:order_id, :product_id, :quantity, :price)");
             foreach ($products as $item) {
                 $stmt->execute([
-                    'order_id'  => $orderId,
-                    'product_id' => (string) $item['productId'],
-                    'quantity'   => (int) $item['quantity'],
-                    'price'      => (float) $item['price'],
+                    'order_id' => $orderId,
+                    'product_id' => (string)$item['productId'],
+                    'quantity' => (int)$item['quantity'],
+                    'price' => (float)$item['price'],
                 ]);
             }
-
             $db->commit();
             return "Order #$orderId created successfully!";
         } catch (PDOException $e) {
@@ -64,16 +54,12 @@ class OrderResolver
         $db = Database::getConnection();
         $stmt = $db->query("
             SELECT o.id AS id, o.total, o.created_at, 
-                   JSON_ARRAYAGG(
-                       JSON_OBJECT('productId', oi.product_id, 'quantity', oi.quantity, 'price', oi.price)
-                   ) AS items
+                   JSON_ARRAYAGG(JSON_OBJECT('productId', oi.product_id, 'quantity', oi.quantity, 'price', oi.price)) AS items
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
             GROUP BY o.id
         ");
-
         $orders = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
         return array_map(function ($order) {
             return [
                 'id' => $order['id'],

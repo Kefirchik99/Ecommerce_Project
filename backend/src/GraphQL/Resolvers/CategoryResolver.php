@@ -22,12 +22,9 @@ class CategoryResolver
     public function resolveAll(): array
     {
         $db = Database::getConnection();
-
         try {
             $stmt = $db->query("SELECT * FROM categories");
             $categories = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-            $this->logger->info("Categories fetched", $categories);
             return $categories;
         } catch (PDOException $e) {
             $this->logger->error("Error fetching categories: " . $e->getMessage());
@@ -38,17 +35,13 @@ class CategoryResolver
     public function resolveById(int $id): array
     {
         $db = Database::getConnection();
-
         try {
             $stmt = $db->prepare("SELECT * FROM categories WHERE id = :id");
             $stmt->execute(['id' => $id]);
             $category = $stmt->fetch(PDO::FETCH_ASSOC);
-
             if (!$category) {
                 throw new RuntimeException("Category not found");
             }
-
-            $this->logger->info("Category fetched for ID {$id}", $category);
             return $category;
         } catch (PDOException $e) {
             $this->logger->error("Error fetching category with ID {$id}: " . $e->getMessage());

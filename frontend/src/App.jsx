@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { HeaderProvider } from './context/HeaderContext';
 import Header from './components/Header';
@@ -10,14 +9,12 @@ const App = () => {
   return (
     <HeaderProvider>
       <CartProvider>
-        <BrowserRouter>
-          <div className="container">
-            <Header />
-            <main>
-              <AppRoutes />
-            </main>
-          </div>
-        </BrowserRouter>
+        <div className="container">
+          <Header />
+          <main>
+            <AppRoutes />
+          </main>
+        </div>
       </CartProvider>
     </HeaderProvider>
   );

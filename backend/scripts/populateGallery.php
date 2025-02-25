@@ -11,17 +11,14 @@ function populateGalleryFromJson(string $jsonFilePath, LoggerInterface $logger):
 {
     $db = Database::getConnection();
     $jsonData = json_decode(file_get_contents($jsonFilePath), true);
-
     if (!is_array($jsonData)) {
         $logger->error('Invalid JSON file.');
         return;
     }
-
     foreach ($jsonData as $product) {
         if (empty($product['gallery'])) {
             continue;
         }
-
         foreach ($product['gallery'] as $imageUrl) {
             try {
                 $stmt = $db->prepare("
@@ -32,19 +29,16 @@ function populateGalleryFromJson(string $jsonFilePath, LoggerInterface $logger):
                     'product_id' => $product['id'],
                     'image_url'  => $imageUrl,
                 ]);
-
                 $logger->info("Inserted gallery image for product ID {$product['id']}: $imageUrl");
             } catch (\PDOException $e) {
                 $logger->error("Error inserting gallery for product_id {$product['id']}: " . $e->getMessage());
             }
         }
     }
-
     $logger->info('Gallery table populated successfully.');
 }
 
 $logger = $GLOBALS['logger'] ?? null;
-
 if (!$logger) {
     echo 'Logger not initialized.';
     exit;
