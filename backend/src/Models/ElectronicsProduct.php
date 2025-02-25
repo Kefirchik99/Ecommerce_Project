@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yaro\EcommerceProject\Models;
+
+use PDO;
 
 class ElectronicsProduct extends Product
 {
     protected static string $table = 'electronics_products';
-
     private array $galleryImages = [];
     private array $prices = [];
 
@@ -36,7 +39,7 @@ class ElectronicsProduct extends Product
         $db = $this->getConnection();
         foreach ($this->galleryImages as $imageUrl) {
             $stmt = $db->prepare("
-                INSERT INTO gallery (product_id, image_url) 
+                INSERT INTO gallery (product_id, image_url)
                 VALUES (:product_id, :image_url)
             ");
             $stmt->execute([

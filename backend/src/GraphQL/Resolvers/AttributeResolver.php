@@ -22,20 +22,12 @@ class AttributeResolver
     {
         try {
             $db = Database::getConnection();
-            $stmt = $db->prepare("
-                SELECT id, name, type 
-                FROM attributes 
-                WHERE product_id = :product_id
-            ");
+            $stmt = $db->prepare("SELECT id, name, type FROM attributes WHERE product_id = :product_id");
             $stmt->execute(['product_id' => $productId]);
-
             $attributes = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
             foreach ($attributes as &$attr) {
-                $attr['items'] = $this->resolveItemsForAttribute((int) $attr['id']);
+                $attr['items'] = $this->resolveItemsForAttribute((int)$attr['id']);
             }
-
-            $this->logger->info("Attributes fetched for product ID {$productId}", $attributes);
             return $attributes;
         } catch (PDOException $e) {
             $this->logger->error("Database error in resolveAttributes for product ID {$productId}: " . $e->getMessage());
@@ -47,17 +39,9 @@ class AttributeResolver
     {
         try {
             $db = Database::getConnection();
-            $stmt = $db->prepare("
-                SELECT id, display_value AS displayValue, value
-                FROM attribute_items
-                WHERE attribute_id = :attribute_id
-            ");
+            $stmt = $db->prepare("SELECT id, display_value AS displayValue, value FROM attribute_items WHERE attribute_id = :attribute_id");
             $stmt->execute(['attribute_id' => $attributeId]);
-
-            $items = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-            $this->logger->info("Attribute items fetched for attribute ID {$attributeId}", $items);
-            return $items;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
         } catch (PDOException $e) {
             $this->logger->error("Database error in resolveItemsForAttribute for attribute ID {$attributeId}: " . $e->getMessage());
             return [];

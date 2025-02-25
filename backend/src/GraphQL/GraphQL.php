@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yaro\EcommerceProject\GraphQL;
 
 use Psr\Log\LoggerInterface;
@@ -29,45 +31,36 @@ class GraphQL
     {
         $logger = $GLOBALS['logger'] ?? null;
         if ($logger) {
-            $graphqlInstance = new self($logger);
-            return $graphqlInstance->execute();
-        } else {
-            throw new \RuntimeException("Logger not initialized.");
+            $instance = new self($logger);
+            return $instance->execute();
         }
+        throw new \RuntimeException("Logger not initialized.");
     }
 
     private function execute()
     {
         try {
             $this->logger->info("Request received: " . date('Y-m-d H:i:s'));
-
             $categoryResolver = new CategoryResolver($this->logger);
             $attributeResolver = new AttributeResolver($this->logger);
             $priceResolver = new PriceResolver();
             $orderResolver = new OrderResolver($this->logger);
-            $productResolver = new ProductResolver(
-                $categoryResolver,
-                $attributeResolver,
-                $priceResolver,
-                $this->logger
-            );
-
+            $productResolver = new ProductResolver($categoryResolver, $attributeResolver, $priceResolver, $this->logger);
             $attributeItemType = new ObjectType([
                 'name' => 'AttributeItem',
                 'fields' => [
-                    'id'           => ['type' => Type::nonNull(Type::string())],
+                    'id' => ['type' => Type::nonNull(Type::string())],
                     'displayValue' => ['type' => Type::nonNull(Type::string())],
-                    'value'        => ['type' => Type::nonNull(Type::string())],
+                    'value' => ['type' => Type::nonNull(Type::string())],
                 ],
             ]);
-
             $attributeType = new ObjectType([
                 'name' => 'Attribute',
                 'fields' => function () use ($attributeItemType, $attributeResolver) {
                     return [
-                        'id'    => ['type' => Type::nonNull(Type::int())],
-                        'name'  => ['type' => Type::nonNull(Type::string())],
-                        'type'  => ['type' => Type::string()],
+                        'id' => ['type' => Type::nonNull(Type::int())],
+                        'name' => ['type' => Type::nonNull(Type::string())],
+                        'type' => ['type' => Type::string()],
                         'items' => [
                             'type' => Type::listOf($attributeItemType),
                             'resolve' => fn($attribute) => $attributeResolver->resolveItemsForAttribute($attribute['id']),
@@ -75,59 +68,54 @@ class GraphQL
                     ];
                 },
             ]);
-
             $orderItemType = new ObjectType([
                 'name' => 'OrderItem',
                 'fields' => [
                     'productId' => ['type' => Type::nonNull(Type::string())],
-                    'quantity'  => ['type' => Type::nonNull(Type::int())],
-                    'price'     => ['type' => Type::nonNull(Type::float())],
+                    'quantity' => ['type' => Type::nonNull(Type::int())],
+                    'price' => ['type' => Type::nonNull(Type::float())],
                 ],
             ]);
-
             $orderType = new ObjectType([
                 'name' => 'Order',
                 'fields' => [
-                    'id'         => ['type' => Type::nonNull(Type::int())],
-                    'total'      => ['type' => Type::nonNull(Type::float())],
+                    'id' => ['type' => Type::nonNull(Type::int())],
+                    'total' => ['type' => Type::nonNull(Type::float())],
                     'created_at' => ['type' => Type::nonNull(Type::string())],
-                    'items'      => [
+                    'items' => [
                         'type' => Type::listOf($orderItemType),
                         'resolve' => fn($order) => $order['items'] ?? [],
                     ],
                 ],
             ]);
-
             $productType = new ObjectType([
                 'name' => 'Product',
                 'fields' => [
-                    'id'          => ['type' => Type::nonNull(Type::string())],
-                    'name'        => ['type' => Type::nonNull(Type::string())],
+                    'id' => ['type' => Type::nonNull(Type::string())],
+                    'name' => ['type' => Type::nonNull(Type::string())],
                     'description' => ['type' => Type::string()],
-                    'brand'       => ['type' => Type::string()],
-                    'inStock'     => ['type' => Type::nonNull(Type::boolean())],
-                    'category'    => ['type' => Type::string()],
-                    'price'       => ['type' => Type::float()],
-                    'gallery'     => [
+                    'brand' => ['type' => Type::string()],
+                    'inStock' => ['type' => Type::nonNull(Type::boolean())],
+                    'category' => ['type' => Type::string()],
+                    'price' => ['type' => Type::float()],
+                    'gallery' => [
                         'type' => Type::listOf(Type::string()),
                         'resolve' => fn($product) => $productResolver->resolveGallery($product['id']),
                     ],
-                    'attributes'  => [
+                    'attributes' => [
                         'type' => Type::listOf($attributeType),
                         'resolve' => fn($product) => $productResolver->resolveAttributes($product['id']),
                     ],
                 ],
             ]);
-
             $orderInputType = new InputObjectType([
                 'name' => 'OrderInput',
                 'fields' => [
                     'productId' => ['type' => Type::nonNull(Type::id())],
-                    'quantity'  => ['type' => Type::nonNull(Type::int())],
-                    'price'     => ['type' => Type::nonNull(Type::float())],
+                    'quantity' => ['type' => Type::nonNull(Type::int())],
+                    'price' => ['type' => Type::nonNull(Type::float())],
                 ],
             ]);
-
             $queryType = new ObjectType([
                 'name' => 'Query',
                 'fields' => [
@@ -135,7 +123,7 @@ class GraphQL
                         'type' => Type::listOf(new ObjectType([
                             'name' => 'Category',
                             'fields' => [
-                                'id'   => ['type' => Type::nonNull(Type::int())],
+                                'id' => ['type' => Type::nonNull(Type::int())],
                                 'name' => ['type' => Type::nonNull(Type::string())],
                             ],
                         ])),
@@ -157,7 +145,6 @@ class GraphQL
                     ],
                 ],
             ]);
-
             $mutationType = new ObjectType([
                 'name' => 'Mutation',
                 'fields' => [
@@ -170,25 +157,17 @@ class GraphQL
                     ],
                 ],
             ]);
-
-            $schema = new Schema(
-                (new SchemaConfig())
-                    ->setQuery($queryType)
-                    ->setMutation($mutationType)
-            );
-
+            $schema = new Schema((new SchemaConfig())->setQuery($queryType)->setMutation($mutationType));
             $rawInput = file_get_contents('php://input');
             $input = json_decode($rawInput, true);
             $query = $input['query'] ?? null;
             $variableValues = $input['variables'] ?? null;
-
             $result = GraphQLBase::executeQuery($schema, $query, null, null, $variableValues);
             $output = $result->toArray();
         } catch (Throwable $e) {
             $output = ['error' => ['message' => $e->getMessage()]];
             $this->logger->error("Error: " . $e->getMessage());
         }
-
         header('Content-Type: application/json; charset=UTF-8');
         echo json_encode($output);
     }

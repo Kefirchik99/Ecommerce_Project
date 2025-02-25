@@ -1,82 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yaro\EcommerceProject\Models;
 
-use Yaro\EcommerceProject\Config\Database;
 use Psr\Log\LoggerInterface;
 
-abstract class Model
-{
-    protected static string $table;
-
-    protected function getConnection(): \PDO
-    {
-        return Database::getConnection();
-    }
-
-    protected function executeQuery(string $query, array $params = []): bool
-    {
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($query);
-            return $stmt->execute($params);
-        } catch (\PDOException $e) {
-            error_log("Error: " . $e->getMessage());
-            return false;
-        }
-    }
-
-    protected function fetchColumn(string $query, array $params = []): ?int
-    {
-        try {
-            $db = $this->getConnection();
-            $stmt = $db->prepare($query);
-            $stmt->execute($params);
-            $id = $stmt->fetchColumn();
-            return $id !== false ? (int)$id : null;
-        } catch (\PDOException $e) {
-            error_log("Error: " . $e->getMessage());
-            return null;
-        }
-    }
-}
-
-class TextAttribute extends Model
+class TextAttribute extends Attribute
 {
     protected static string $table = 'text_attributes';
-    private string $name;
-    private int $productId;
-    private LoggerInterface $logger;
 
     public function __construct(string $name, int $productId, LoggerInterface $logger)
     {
-        $this->name = $name;
-        $this->productId = $productId;
-        $this->logger = $logger;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getProductId(): int
-    {
-        return $this->productId;
+        parent::__construct($name, $productId, $logger);
     }
 
     public function save(): void
     {
-        $query = "
-            INSERT INTO " . static::$table . " (product_id, name) 
-            VALUES (:product_id, :name)
-        ";
-        $params = [
-            'product_id' => $this->productId,
-            'name' => $this->name,
-        ];
-        if (!$this->executeQuery($query, $params)) {
-            $this->logger->error("Error saving TextAttribute: " . print_r($params, true));
+        $db = $this->getConnection();
+        try {
+            $stmt = $db->prepare("
+                INSERT INTO " . static::$table . " (product_id, name)
+                VALUES (:product_id, :name)
+            ");
+            $stmt->execute([
+                'product_id' => $this->getProductId(),
+                'name' => $this->getName(),
+            ]);
+        } catch (\PDOException $e) {
+            $this->logger->error("Error saving TextAttribute: " . $e->getMessage());
         }
     }
 
@@ -84,21 +36,21 @@ class TextAttribute extends Model
     {
         $attributeId = $this->getId();
         if ($attributeId === null) {
-            $this->logger->error("Attribute not found for name: {$this->name} and product_id: {$this->productId}");
+            $this->logger->error("Attribute not found for name: " . $this->getName() . " and product_id: " . $this->getProductId());
             return;
         }
-
-        $query = "
-            INSERT INTO text_attribute_items (attribute_id, display_value, value)
-            VALUES (:attribute_id, :display_value, :value)
-        ";
-        $params = [
-            'attribute_id' => $attributeId,
-            'display_value' => $displayValue,
-            'value' => $value,
-        ];
-        if (!$this->executeQuery($query, $params)) {
-            $this->logger->error("Error saving TextAttribute item: " . print_r($params, true));
+        try {
+            $stmt = $this->getConnection()->prepare("
+                INSERT INTO text_attribute_items (attribute_id, display_value, value)
+                VALUES (:attribute_id, :display_value, :value)
+            ");
+            $stmt->execute([
+                'attribute_id' => $attributeId,
+                'display_value' => $displayValue,
+                'value' => $value,
+            ]);
+        } catch (\PDOException $e) {
+            $this->logger->error("Error saving TextAttribute item: " . $e->getMessage());
         }
     }
 
@@ -109,8 +61,8 @@ class TextAttribute extends Model
             WHERE name = :name AND product_id = :product_id
         ";
         $params = [
-            'name' => $this->name,
-            'product_id' => $this->productId,
+            'name' => $this->getName(),
+            'product_id' => $this->getProductId(),
         ];
         return $this->fetchColumn($query, $params);
     }
